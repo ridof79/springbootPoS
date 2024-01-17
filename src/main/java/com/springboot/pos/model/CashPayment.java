@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @DiscriminatorValue("CASH")
 public class CashPayment extends Payment{
 	
-	@Column(name = "cash_in_hand", nullable = false)
+	@Column(name = "cash_in_hand")
 	private double cashInHand;
 	
 	public CashPayment(double cashInHand) {

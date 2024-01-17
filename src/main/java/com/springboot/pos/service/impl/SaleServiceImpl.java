@@ -2,6 +2,7 @@ package com.springboot.pos.service.impl;
 
 import com.springboot.pos.dto.SaleDto;
 import com.springboot.pos.dto.SaleItemDto;
+import com.springboot.pos.dto.SavedSaleDto;
 import com.springboot.pos.exception.ServiceException;
 import com.springboot.pos.model.*;
 import com.springboot.pos.repository.SaleRepository;
@@ -34,22 +35,22 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     @Transactional
-    public SaleDto saveQrisTransaction(SaleDto saleDto) throws ServiceException {
+    public SavedSaleDto saveQrisTransaction(SaleDto saleDto) throws ServiceException {
         Sale sale = convertSale(saleDto);
         sale.setTransactionDate(new Date());
         Payment payment = new QrisPayment();
         Sale savedSale = setupPaymentAndSave(sale, payment);
-        return new SaleDto(savedSale);
+        return new SavedSaleDto(savedSale);
     }
 
 
     @Override
     @Transactional
-    public SaleDto saveCashTransaction(SaleDto saleDto) throws ServiceException, PaymentException {
+    public SavedSaleDto saveCashTransaction(SaleDto saleDto) throws ServiceException, PaymentException {
         if(saleDto.getCashInHand() > saleDto.totalPrice()) {
             Sale sale = convertSale(saleDto);
             Payment payment = new CashPayment(saleDto.getCashInHand());
-            return new SaleDto(setupPaymentAndSave(sale, payment));
+            return new SavedSaleDto(setupPaymentAndSave(sale, payment));
         } else {
             throw new PaymentException(Constants.INSUFFICIENT_CASH);
         }
@@ -62,9 +63,9 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public SaleDto findSaleById(String id) throws ServiceException {
+    public SavedSaleDto findSaleById(String id) throws ServiceException {
         if (saleRepository.findById(id).isPresent()) {
-            return new SaleDto(saleRepository.findById(id).get());
+            return new SavedSaleDto(saleRepository.findById(id).get());
         }
         throw new ServiceException(String.format(Constants.SALE_NOT_FOUND, id));
     }

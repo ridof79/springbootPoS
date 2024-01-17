@@ -1,10 +1,7 @@
 package com.springboot.pos.service.impl;
 
 import com.springboot.pos.config.JwtUtils;
-import com.springboot.pos.dto.AuthDto;
-import com.springboot.pos.dto.CashierDto;
-import com.springboot.pos.dto.LoginDto;
-import com.springboot.pos.dto.UserDetailsDto;
+import com.springboot.pos.dto.*;
 import com.springboot.pos.model.Cashier;
 import com.springboot.pos.service.AuthService;
 import com.springboot.pos.service.CashierService;
@@ -44,11 +41,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public CashierDto register(AuthDto user) {
+    public SavedCashierDto register(AuthDto user) {
         Cashier cashier = new Cashier(
                 user.getUsername(),
                 user.getName(),
                 passwordEncoder.encode(user.getPassword()));
-        return cashierService.save(cashier);
+        return new SavedCashierDto(cashierService.save(cashier));
     }
 }

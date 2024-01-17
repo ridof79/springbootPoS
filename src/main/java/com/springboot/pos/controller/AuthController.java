@@ -3,6 +3,7 @@ package com.springboot.pos.controller;
 import com.springboot.pos.dto.AuthDto;
 import com.springboot.pos.dto.CashierDto;
 import com.springboot.pos.dto.LoginDto;
+import com.springboot.pos.dto.SavedCashierDto;
 import com.springboot.pos.service.AuthService;
 import com.springboot.pos.util.ApiUrlConstant;
 import com.springboot.pos.util.Constants;
@@ -34,7 +35,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerCustomer(@RequestBody AuthDto authDto){
-        CashierDto register = authService.register(authDto);
+        SavedCashierDto register = authService.register(authDto);
         Response<?> response = new Response<>(Constants.SUCCESSFULLY_CREATE_CASHIER, register);
 
         return ResponseEntity.status(HttpStatus.CREATED)
